@@ -5,14 +5,18 @@ library(caret)     # For training data
 library(lattice)   # For boxplot
 
 # Create directories for results
-if (!dir.exists("Results")) {
-  dir.create("Results")
-  dir.create("Results/Histogram")
-  dir.create("Results/Boxplot")
-  dir.create("Results/Correlation")
-  dir.create("Results/Missing")
-  dir.create("Results/Residual")
-  dir.create("Results/Scatter")
+dirs <- c("Results",
+          "Results/Cleaned",
+          "Results/Histogram",
+          "Results/Boxplot",
+          "Results/Correlation",
+          "Results/Missing",
+          "Results/Residual",
+          "Results/Scatter")
+for (dir in dirs) {
+  if (!dir.exists(dir)) {
+    dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+  }
 }
 
 # Read CSV file
@@ -86,6 +90,8 @@ reformat_cache <- function(cache_values) {
 }
 
 main_data["L2_Cache"] <- lapply(main_data["L2_Cache"], reformat_cache)
+
+write.csv(main_data, "Results/Cleaned/cleaned_data.csv", row.names = FALSE)
 
 # Transform variables
 main_data$Memory_Bandwidth <- log(main_data$Memory_Bandwidth + 1)
