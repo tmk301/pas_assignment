@@ -180,35 +180,25 @@ ggplot(cor_data, aes(x = Var1, y = Var2, fill = value)) +
   )
 
 # Boxplots
-ggplot(main_data, aes(x = Memory_Speed, y = Memory_Bandwidth)) +
-  geom_boxplot(fill = "lightblue", color = "darkblue", alpha = 0.7) +
-  labs(
-    title = "Boxplot of Memory Bandwidth by Memory Speed",
-    x = "Memory Speed (MHz)",
-    y = "Memory Bandwidth (GB/s)"
-  ) +
-  theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5))
+boxplot(main_data$Memory_Speed,
+        main = "Boxplot of Memory Speed",
+        ylab = "Memory Speed (MHz)",
+        col = "lightblue")
 
-ggplot(main_data, aes(x = L2_Cache, y = Memory_Bandwidth)) +
-  geom_boxplot(fill = "lightblue", color = "darkblue", alpha = 0.7) +
-  labs(
-    title = "Boxplot of Memory Bandwidth by L2 Cache Size",
-    x = "L2 Cache (KB)",
-    y = "Memory Bandwidth (GB/s)"
-  ) +
-  theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5))
+boxplot(main_data$L2_Cache,
+        main = "Boxplot of L2_Cache Size",
+        ylab = "L2_Cache (KB)",
+        col = "lightblue")
 
-ggplot(main_data, aes(x = Memory_Bus, y = Memory_Bandwidth)) +
-  geom_boxplot(fill = "lightblue", color = "darkblue", alpha = 0.7) +
-  labs(
-    title = "Boxplot of Memory Bandwidth by Memory Bus",
-    x = "Memory Bus (Bit)",
-    y = "Memory Bandwidth (GB/s)"
-  ) +
-  theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5))
+boxplot(main_data$Memory_Bus,
+        main = "Boxplot of Memory_Bus",
+        ylab = "Memory_Bus (Bit)",
+        col = "lightblue")
+
+boxplot(main_data$Memory_Bandwidth,
+        main = "Boxplot of Memory_Bandwidth",
+        ylab = "Memory_Bandwidth (GB/s)",
+        col = "lightblue")
 
 # Linear regression model
 set.seed(14052025)
