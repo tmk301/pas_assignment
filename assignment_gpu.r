@@ -4,6 +4,17 @@ library(reshape2)  # For preparing data for correlation plot
 library(caret)     # For training data
 library(lattice)   # For boxplot
 
+# Create directories for results
+if (!dir.exists("Results")) {
+  dir.create("Results")
+  dir.create("Results/Histogram")
+  dir.create("Results/Boxplot")
+  dir.create("Results/Correlation")
+  dir.create("Results/Missing")
+  dir.create("Results/Residual")
+  dir.create("Results/Scatter")
+}
+
 # Read CSV file
 gpu_data <- read.csv("All_GPUs.csv")
 head(gpu_data)
@@ -45,6 +56,9 @@ ggplot(na_summary, aes(x = Column, y = NA_Percentage)) +
     axis.text.x = element_text(size = 10, angle = 90, hjust = 1)
   ) +
   coord_flip()
+ggsave("Results/Missing/missing_data_plot.png",
+       width = 10, height = 7,
+       units = "in", dpi = 300, bg = "white")
 
 columns_to_clean <- c("Memory_Bandwidth", "Memory_Bus", "Memory_Speed")
 
@@ -94,6 +108,9 @@ ggplot(main_data, aes(x = Memory_Bandwidth)) +
   ) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))
+ggsave("Results/Histogram/memory_bandwidth_histogram.png",
+       width = 10, height = 7,
+       units = "in", dpi = 300, bg = "white")
 
 ggplot(main_data, aes(x = Memory_Speed)) +
   geom_histogram(fill = "lightgreen", color = "black", alpha = 0.7) +
@@ -104,6 +121,9 @@ ggplot(main_data, aes(x = Memory_Speed)) +
   ) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))
+ggsave("Results/Histogram/memory_speed_histogram.png",
+       width = 10, height = 7,
+       units = "in", dpi = 300, bg = "white")
 
 ggplot(main_data, aes(x = L2_Cache)) +
   geom_histogram(fill = "lightpink", color = "black", alpha = 0.7) +
@@ -114,6 +134,9 @@ ggplot(main_data, aes(x = L2_Cache)) +
   ) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))
+ggsave("Results/Histogram/l2_cache_histogram.png",
+       width = 10, height = 7,
+       units = "in", dpi = 300, bg = "white")
 
 ggplot(main_data, aes(x = Memory_Bus)) +
   geom_histogram(fill = "lightyellow", color = "black", alpha = 0.7) +
@@ -124,6 +147,9 @@ ggplot(main_data, aes(x = Memory_Bus)) +
   ) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))
+ggsave("Results/Histogram/memory_bus_histogram.png",
+       width = 10, height = 7,
+       units = "in", dpi = 300, bg = "white")
 
 # Scatter plots
 ggplot(main_data, aes(x = Memory_Speed, y = Memory_Bandwidth)) +
@@ -135,6 +161,9 @@ ggplot(main_data, aes(x = Memory_Speed, y = Memory_Bandwidth)) +
   ) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))
+ggsave("Results/Scatter/memory_speed_scatter.png",
+       width = 10, height = 7,
+       units = "in", dpi = 300, bg = "white")
 
 ggplot(main_data, aes(x = L2_Cache, y = Memory_Bandwidth)) +
   geom_point(color = "red", alpha = 0.7) +
@@ -145,6 +174,9 @@ ggplot(main_data, aes(x = L2_Cache, y = Memory_Bandwidth)) +
   ) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))
+ggsave("Results/Scatter/l2_cache_scatter.png",
+       width = 10, height = 7,
+       units = "in", dpi = 300, bg = "white")
 
 ggplot(main_data, aes(x = Memory_Bus, y = Memory_Bandwidth)) +
   geom_point(color = "blue", alpha = 0.7) +
@@ -155,6 +187,9 @@ ggplot(main_data, aes(x = Memory_Bus, y = Memory_Bandwidth)) +
   ) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))
+ggsave("Results/Scatter/memory_bus_scatter.png",
+       width = 10, height = 7,
+       units = "in", dpi = 300, bg = "white")
 
 # Correlation matrix
 data <- main_data[c("Memory_Bandwidth", "Memory_Speed",
@@ -178,30 +213,49 @@ ggplot(cor_data, aes(x = Var1, y = Var2, fill = value)) +
     axis.text.x = element_text(angle = 45, hjust = 1),
     plot.title = element_text(hjust = 0.5)
   )
+ggsave("Results/Correlation/correlation_diagram.png",
+       width = 10, height = 8,
+       units = "in", dpi = 300, bg = "white")
 
 # Boxplots
+png("Results/Boxplot/memory_speed_boxplot.png",
+    width = 8, height = 6,
+    units = "in", res = 300, bg = "white")
 boxplot(main_data$Memory_Speed,
         main = "Boxplot of Memory Speed",
         ylab = "Memory Speed (MHz)",
         col = "lightblue")
+dev.off()
 
+png("Results/Boxplot/l2_cache_boxplot.png",
+    width = 8, height = 6,
+    units = "in", res = 300, bg = "white")
 boxplot(main_data$L2_Cache,
         main = "Boxplot of L2_Cache Size",
         ylab = "L2_Cache (KB)",
         col = "lightblue")
+dev.off()
 
+png("Results/Boxplot/memory_bus_boxplot.png",
+    width = 8, height = 6,
+    units = "in", res = 300, bg = "white")
 boxplot(main_data$Memory_Bus,
         main = "Boxplot of Memory_Bus",
         ylab = "Memory_Bus (Bit)",
         col = "lightblue")
+dev.off()
 
+png("Results/Boxplot/memory_bandwidth_boxplot.png",
+    width = 8, height = 6,
+    units = "in", res = 300, bg = "white")
 boxplot(main_data$Memory_Bandwidth,
         main = "Boxplot of Memory_Bandwidth",
         ylab = "Memory_Bandwidth (GB/s)",
         col = "lightblue")
+dev.off()
 
 # Linear regression model
-set.seed(14052025)
+set.seed(31112024)
 train_index <- createDataPartition(
   main_data$Memory_Bandwidth,
   p = 0.8,
@@ -216,5 +270,9 @@ model <- lm(Memory_Bandwidth ~ Memory_Speed + L2_Cache + Memory_Bus,
 summary(model)
 
 # Residual plots
+png("Results/Residual/residual_plots.png",
+    width = 10, height = 12,
+    units = "in", res = 300, bg = "white")
 par(mfrow = c(2, 2))
 plot(model)
+dev.off()
