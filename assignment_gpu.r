@@ -211,7 +211,7 @@ ggplot(main_data, aes(x = Memory_Bus, y = Memory_Bandwidth)) +
   theme(plot.title = element_text(hjust = 0.5))
 
 # Linear regression model
-set.seed(31112024)
+set.seed(14052025)
 train_index <- createDataPartition(
   main_data$Memory_Bandwidth,
   p = 0.8,
